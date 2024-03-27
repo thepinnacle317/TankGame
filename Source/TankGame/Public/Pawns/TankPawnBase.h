@@ -4,26 +4,51 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+#include "AbilitySystemInterface.h"
 #include "TankPawnBase.generated.h"
 
+/* Forward Declarations */
+class UAttributeSet;
+class UGameplayEffect;
+class UGameplayAbility;
+
 UCLASS()
-class TANKGAME_API ATankPawnBase : public APawn
+class TANKGAME_API ATankPawnBase : public APawn , public IAbilitySystemInterface
 {
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this pawn's properties
 	ATankPawnBase();
-
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-public:	
-	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	/* Ability System */
+	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
+	UAttributeSet* GetAttributeSet() const { return AttributeSet; }
+
+	TObjectPtr<USkeletalMesh> TankMesh;
+
+	/* Death */
+	UFUNCTION(NetMulticast, Reliable)
+	virtual void MulticastTankDeath();
+
+protected:
+	virtual void BeginPlay() override;
+
+	bool bDead = false;
+
+	/* Ability System */
+	void ApplyEffectToSelf(TSubclassOf<UGameplayEffect> GameplayEffectClass, float Level) const;
+	virtual void InitializeDefaultAttributes() const;
+	void AddTankAbilities();
+
+	TObjectPtr<UAttributeSet> AttributeSet;
+
+	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Tank Properties|Gameplay Effects")
+	TSubclassOf<UGameplayEffect> DefaultTankAttributes;
+
+private:
+	TArray<TSubclassOf<UGameplayAbility>> TankStartupAbilities;
 };

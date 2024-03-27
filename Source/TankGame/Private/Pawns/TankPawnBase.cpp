@@ -2,33 +2,69 @@
 
 
 #include "Pawns/TankPawnBase.h"
+#include "AbilitySystemComponent.h"
+#include <AbilitySystem/TankASC.h>
 
-// Sets default values
 ATankPawnBase::ATankPawnBase()
 {
- 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
+	TankMesh = CreateDefaultSubobject<USkeletalMesh>(TEXT("Tank Mesh"));
+	
 }
 
-// Called when the game starts or when spawned
+void ATankPawnBase::MulticastTankDeath_Implementation()
+{
+	// Deal with tank collision and physics here.
+
+	bDead = true;
+}
+
 void ATankPawnBase::BeginPlay()
 {
 	Super::BeginPlay();
 	
 }
 
-// Called every frame
+void ATankPawnBase::ApplyEffectToSelf(TSubclassOf<UGameplayEffect> GameplayEffectClass, float Level) const
+{
+	// Make sure there is a valid ASC and GameplayEffectClass assigned
+	check(IsValid(GetAbilitySystemComponent()));
+	check(GameplayEffectClass);
+
+	// Wraps the FGameplayEffectContext to allow for replication
+	FGameplayEffectContextHandle EffectContextHandle = GetAbilitySystemComponent()->MakeEffectContext();
+	// Sets the object the effect was created from
+	EffectContextHandle.AddSourceObject(this);
+	// Allows blueprints to generate a GameplayEffectSpec once and then reference it by handle, to apply it multiple times/multiple targets
+	const FGameplayEffectSpecHandle EffectSpecHandle = GetAbilitySystemComponent()->MakeOutgoingSpec(GameplayEffectClass, Level, EffectContextHandle);
+
+	/*
+	 * Applies the GameplayEffect to the target and uses the SourceObject which is this class.  This will allow us to apply effects to all classes that inherit from this.
+	 * This also gives the option to set prediction on the client in the future.
+	 */
+	GetAbilitySystemComponent()->ApplyGameplayEffectSpecToTarget(*EffectSpecHandle.Data.Get(), GetAbilitySystemComponent());
+}
+
+void ATankPawnBase::InitializeDefaultAttributes() const
+{
+	ApplyEffectToSelf(DefaultTankAttributes, 1.f);
+}
+
+void ATankPawnBase::AddTankAbilities()
+{
+	UTankASC* TankASC = CastChecked<UTankASC>(AbilitySystemComponent);
+
+	TankASC->AddTankAbilities(TankStartupAbilities);
+}
+
 void ATankPawnBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
-// Called to bind functionality to input
-void ATankPawnBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+UAbilitySystemComponent* ATankPawnBase::GetAbilitySystemComponent() const
 {
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
+	return AbilitySystemComponent;
 }
 
