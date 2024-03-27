@@ -8,9 +8,6 @@
 ATankPawnBase::ATankPawnBase()
 {
 	PrimaryActorTick.bCanEverTick = false;
-
-	TankMesh = CreateDefaultSubobject<USkeletalMesh>(TEXT("Tank Mesh"));
-	
 }
 
 void ATankPawnBase::MulticastTankDeath_Implementation()
@@ -51,10 +48,16 @@ void ATankPawnBase::InitializeDefaultAttributes() const
 	ApplyEffectToSelf(DefaultTankAttributes, 1.f);
 }
 
+void ATankPawnBase::InitAbilityActorInfo()
+{
+}
+
 void ATankPawnBase::AddTankAbilities()
 {
 	UTankASC* TankASC = CastChecked<UTankASC>(AbilitySystemComponent);
 
+	// Check if the server has authority since this will be a server call
+	if (!HasAuthority()) return;
 	TankASC->AddTankAbilities(TankStartupAbilities);
 }
 
