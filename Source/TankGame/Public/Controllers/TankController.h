@@ -6,12 +6,18 @@
 #include "GameFramework/PlayerController.h"
 #include "TankController.generated.h"
 
+
+/* Forward Declarations */
+class UChaosVehicleMovementComponent;
+class ATankPawnBase;
 class UTankAbilityInputConfig;
 struct FInputActionValue;
 class UTankASC;
 struct FGameplayTag;
 class UInputAction;
 class UInputMappingContext;
+
+
 /**
  * 
  */
@@ -26,6 +32,9 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
+	virtual void OnPossess(APawn* InPawn) override;
+
+	TObjectPtr<ATankPawnBase> TankPawn;
 
 private:
 	/* Enhanced Input */
@@ -33,9 +42,14 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Input System")
 	TObjectPtr<UInputMappingContext> TankContext;
 	UPROPERTY(EditAnywhere, Category = "Input System")
-	TObjectPtr<UInputAction> MoveAction;
+	TObjectPtr<UInputAction> ThrottleAction;
 	UPROPERTY(EditAnywhere, Category = "Input System")
-	TObjectPtr<UInputAction> LookAction;
+	TObjectPtr<UInputAction> SteeringAction;
+	UPROPERTY(EditAnywhere, Category = "Input System")
+	TObjectPtr<UInputAction> TurretLookAction;
+	UPROPERTY(EditAnywhere, Category = "Input System")
+	TObjectPtr<UInputAction> BrakeAction;
+	
 
 	/* Abilities */
 	void AbilityInputTagPressed(FGameplayTag InputTag);
@@ -46,11 +60,23 @@ private:
 	TObjectPtr<UTankAbilityInputConfig> TankAbilityInputs;
 
 	/* Movement */
-	void MoveTriggered(const FInputActionValue& InputActionValue);
-	void Look(const FInputActionValue& InputActionValue);
+	void Throttle(const FInputActionValue& InputActionValue);
+	void Steering(const FInputActionValue& InputActionValue);
+	void TurretLook(const FInputActionValue& InputActionValue);
+	void Brake(const FInputActionValue& InputActionValue);
+	void StartBrake(const FInputActionValue& InputActionValue);
+	void StopBrake(const FInputActionValue& InputActionValue);
+
+	UPROPERTY(VisibleAnywhere)
+	float SteeringValue;
+	UPROPERTY(VisibleAnywhere)
+	float ThrottleValue;
+	UPROPERTY(VisibleAnywhere)
+	float BrakeValue;
 
 	/* Ability System */
 	UTankASC* GetTankASC();
 	UPROPERTY()
 	TObjectPtr<UTankASC> TankASC;
+
 };

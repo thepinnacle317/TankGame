@@ -4,10 +4,16 @@
 #include "Pawns/TankPawnBase.h"
 #include "AbilitySystemComponent.h"
 #include <AbilitySystem/TankASC.h>
+#include "ChaosWheeledVehicleMovementComponent.h"
+#include "ChaosVehicleMovementComponent.h"
 
 ATankPawnBase::ATankPawnBase()
 {
-	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bCanEverTick = true;
+	bReplicates = true;
+
+	// Set the Vehicle Movement Component
+	VehicleMovementComponent = CastChecked<UChaosWheeledVehicleMovementComponent>(GetVehicleMovement());
 }
 
 void ATankPawnBase::MulticastTankDeath_Implementation()

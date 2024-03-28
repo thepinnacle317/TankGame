@@ -7,13 +7,13 @@
 #include "PlayerTankPawn.generated.h"
 
 
-class UTankASC;
 /* Forward Declarations */
 class UCapsuleComponent;
 class USkeletalMeshComponent;
 class USceneComponent;
 class UCameraComponent;
 class USpringArmComponent;
+class UTankASC;
 
 
 /**
@@ -32,18 +32,10 @@ public:
 	virtual void PostInitializeComponents() override;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess = "true"))
-	TObjectPtr<USceneComponent> DefaultRoot;
-	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess = "true"))
-	TObjectPtr<UCapsuleComponent> CapsuleComponent;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess = "true"))
 	TObjectPtr<USpringArmComponent> SpringArm;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess = "true"))
 	TObjectPtr<UCameraComponent> Camera;
-
-protected:
 
 private:
 	virtual void InitAbilityActorInfo() override;

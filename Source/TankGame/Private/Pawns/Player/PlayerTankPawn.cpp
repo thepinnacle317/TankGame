@@ -17,14 +17,8 @@ APlayerTankPawn::APlayerTankPawn()
 	PrimaryActorTick.bCanEverTick = true;
 	bReplicates = true;
 
-	DefaultRoot = CreateDefaultSubobject<USceneComponent>(TEXT("Root Component"));
-	SetRootComponent(DefaultRoot);
-	
-	CapsuleComponent = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Capsule Component"));
-	CapsuleComponent->SetupAttachment(GetRootComponent());
-
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("Spring Arm"));
-	SpringArm->SetupAttachment(CapsuleComponent);
+	SpringArm->SetupAttachment(GetMesh());
 
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(SpringArm);

@@ -9,6 +9,7 @@
 #include "TankPawnBase.generated.h"
 
 
+
 /* Forward Declarations */
 struct FInputActionValue;
 class UAbilitySystemComponent;
@@ -16,6 +17,7 @@ class UAttributeSet;
 class UGameplayEffect;
 class UGameplayAbility;
 class UCapsuleComponent;
+class UChaosWheeledVehicleMovementComponent;
 
 UCLASS()
 class TANKGAME_API ATankPawnBase : public AWheeledVehiclePawn , public IAbilitySystemInterface
@@ -30,6 +32,9 @@ public:
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
 	UAttributeSet* GetAttributeSet() const { return AttributeSet; }
+
+	
+	TObjectPtr<UChaosWheeledVehicleMovementComponent> VehicleMovementComponent;
 
 	/* Death */
 	UFUNCTION(NetMulticast, Reliable)

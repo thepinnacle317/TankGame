@@ -3,12 +3,14 @@
 
 #include "Controllers/TankController.h"
 #include "AbilitySystemBlueprintLibrary.h"
+#include "ChaosVehicleMovementComponent.h"
+#include "ChaosWheeledVehicleMovementComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "GameplayTagContainer.h"
 #include "InputActionValue.h"
-#include "WheeledVehiclePawn.h"
 #include "AbilitySystem/TankASC.h"
 #include "Input/TankEnhancedInputComponent.h"
+#include "Pawns/TankPawnBase.h"
 
 ATankController::ATankController()
 {
@@ -25,14 +27,38 @@ void ATankController::BeginPlay()
 	if (Subsystem) Subsystem->AddMappingContext(TankContext, 0);
 }
 
+void ATankController::OnPossess(APawn* InPawn)
+{
+	Super::OnPossess(InPawn);
+
+	// Pointer to the Controlled Pawn.
+	TankPawn = CastChecked<ATankPawnBase>(InPawn);
+}
+
 void ATankController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
 
 	// Set the Enhanced Input Component
 	UTankEnhancedInputComponent* TankEnhancedInputComponent = CastChecked<UTankEnhancedInputComponent>(InputComponent);
-	TankEnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ThisClass::MoveTriggered);
-	TankEnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ThisClass::Look);
+	/* Throttle */
+	TankEnhancedInputComponent->BindAction(ThrottleAction, ETriggerEvent::Triggered, this, &ThisClass::Throttle);
+	TankEnhancedInputComponent->BindAction(ThrottleAction, ETriggerEvent::Completed, this, &ThisClass::Throttle);
+
+	/* Steering */
+	TankEnhancedInputComponent->BindAction(SteeringAction, ETriggerEvent::Triggered, this, &ThisClass::Steering);
+	TankEnhancedInputComponent->BindAction(SteeringAction, ETriggerEvent::Completed, this, &ThisClass::Steering);
+
+	/* Braking */
+	TankEnhancedInputComponent->BindAction(BrakeAction, ETriggerEvent::Triggered, this, &ThisClass::Brake);
+	TankEnhancedInputComponent->BindAction(BrakeAction, ETriggerEvent::Started, this, &ThisClass::StartBrake);
+	TankEnhancedInputComponent->BindAction(BrakeAction, ETriggerEvent::Completed, this, &ThisClass::StopBrake);
+
+	/* Turret */
+	TankEnhancedInputComponent->BindAction(TurretLookAction, ETriggerEvent::Triggered, this, &ThisClass::TurretLook);
+	TankEnhancedInputComponent->BindAction(TurretLookAction, ETriggerEvent::Completed, this, &ThisClass::TurretLook);
+
+	/* Ability Inputs */
 	TankEnhancedInputComponent->BindAbilityInputs(TankAbilityInputs, this, &ThisClass::AbilityInputTagPressed, &ThisClass::AbilityInputTagReleased);
 }
 
@@ -54,30 +80,54 @@ void ATankController::AbilityInputTagReleased(FGameplayTag InputTag)
 	}
 }
 
-void ATankController::MoveTriggered(const FInputActionValue& InputActionValue)
+void ATankController::Throttle(const FInputActionValue& InputActionValue)
 {
-	const FVector2d InputAxisVector = InputActionValue.Get<FVector2d>();
-	const FRotator Rotation = GetControlRotation();
-	const FRotator YawRotation(0.f, Rotation.Yaw, 0.f);
-
-	// Gets the forward Vector & Right Vector
-	const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-	const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
-
-	if (AWheeledVehiclePawn* ControlledPawn = GetPawn<AWheeledVehiclePawn>())
+	// Get the Input Magnitude for the throttle
+	ThrottleValue = InputActionValue.Get<float>();
+	if (TankPawn)
 	{
-		ControlledPawn->AddMovementInput(ForwardDirection, InputAxisVector.Y);
-		ControlledPawn->AddMovementInput(RightDirection, InputAxisVector.X);
+		TankPawn->VehicleMovementComponent->SetThrottleInput(ThrottleValue);
+		GEngine->AddOnScreenDebugMessage(3, 3.f, FColor::Orange, FString::Printf(TEXT("Throttle Value: %f"), ThrottleValue));
 	}
 }
 
-void ATankController::Look(const FInputActionValue& InputActionValue)
+void ATankController::Steering(const FInputActionValue& InputActionValue)
 {
-	const FVector2d LookAxisVector = InputActionValue.Get<FVector2d>();
-	if (APawn* ControlledPawn = GetPawn<APawn>())
+	SteeringValue = InputActionValue.Get<float>();
+
+	if (TankPawn)
 	{
-		ControlledPawn->AddControllerPitchInput(LookAxisVector.Y);
-		ControlledPawn->AddControllerYawInput(LookAxisVector.X);
+		TankPawn->VehicleMovementComponent->SetYawInput(SteeringValue);
+		GEngine->AddOnScreenDebugMessage(3, 3.f, FColor::Orange, FString::Printf(TEXT("Steering Value: %f"), SteeringValue));
+	}
+}
+
+void ATankController::TurretLook(const FInputActionValue& InputActionValue)
+{	
+}
+
+void ATankController::Brake(const FInputActionValue& InputActionValue)
+{
+	BrakeValue = InputActionValue.Get<float>();
+
+	if (TankPawn)
+	{
+		TankPawn->VehicleMovementComponent->SetBrakeInput(BrakeValue);
+		GEngine->AddOnScreenDebugMessage(3, 3.f, FColor::Orange, FString::Printf(TEXT("Brake Value: %f"), BrakeValue));
+	}
+}
+
+void ATankController::StartBrake(const FInputActionValue& InputActionValue)
+{
+	// Handle lights or anything else braking involved here
+}
+
+void ATankController::StopBrake(const FInputActionValue& InputActionValue)
+{
+	// Handle lights or anything else braking involved here
+	if (TankPawn)
+	{
+		TankPawn->VehicleMovementComponent->SetBrakeInput(0.0f);
 	}
 }
 
