@@ -6,7 +6,9 @@
 #include "EnhancedInputSubsystems.h"
 #include "GameplayTagContainer.h"
 #include "InputActionValue.h"
+#include "WheeledVehiclePawn.h"
 #include "AbilitySystem/TankASC.h"
+#include "Input/TankEnhancedInputComponent.h"
 
 ATankController::ATankController()
 {
@@ -16,9 +18,22 @@ ATankController::ATankController()
 void ATankController::BeginPlay()
 {
 	Super::BeginPlay();
+
+	// Halts Execution if the TankIMC has not been assigned
 	check(TankContext);
 	UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer());
 	if (Subsystem) Subsystem->AddMappingContext(TankContext, 0);
+}
+
+void ATankController::SetupInputComponent()
+{
+	Super::SetupInputComponent();
+
+	// Set the Enhanced Input Component
+	UTankEnhancedInputComponent* TankEnhancedInputComponent = CastChecked<UTankEnhancedInputComponent>(InputComponent);
+	TankEnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ThisClass::MoveTriggered);
+	TankEnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ThisClass::Look);
+	TankEnhancedInputComponent->BindAbilityInputs(TankAbilityInputs, this, &ThisClass::AbilityInputTagPressed, &ThisClass::AbilityInputTagReleased);
 }
 
 void ATankController::AbilityInputTagPressed(FGameplayTag InputTag)
@@ -39,15 +54,6 @@ void ATankController::AbilityInputTagReleased(FGameplayTag InputTag)
 	}
 }
 
-void ATankController::AbilityInputTagHeld(FGameplayTag InputTag)
-{
-	if (GetTankASC())
-	{
-		GetTankASC()->AbilityInputTagHeld(InputTag);
-		GEngine->AddOnScreenDebugMessage(3, 3.f, FColor::Blue, FString("Held"));
-	}
-}
-
 void ATankController::MoveTriggered(const FInputActionValue& InputActionValue)
 {
 	const FVector2d InputAxisVector = InputActionValue.Get<FVector2d>();
@@ -58,7 +64,7 @@ void ATankController::MoveTriggered(const FInputActionValue& InputActionValue)
 	const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
 	const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 
-	if (APawn* ControlledPawn = GetPawn<APawn>())
+	if (AWheeledVehiclePawn* ControlledPawn = GetPawn<AWheeledVehiclePawn>())
 	{
 		ControlledPawn->AddMovementInput(ForwardDirection, InputAxisVector.Y);
 		ControlledPawn->AddMovementInput(RightDirection, InputAxisVector.X);
@@ -93,10 +99,3 @@ void ATankController::PlayerTick(float DeltaTime)
 {
 	Super::PlayerTick(DeltaTime);
 }
-
-void ATankController::SetupInputComponent()
-{
-	Super::SetupInputComponent();
-}
-
-

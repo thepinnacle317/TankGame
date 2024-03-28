@@ -6,6 +6,7 @@
 #include "GameFramework/PlayerController.h"
 #include "TankController.generated.h"
 
+class UTankAbilityInputConfig;
 struct FInputActionValue;
 class UTankASC;
 struct FGameplayTag;
@@ -39,7 +40,10 @@ private:
 	/* Abilities */
 	void AbilityInputTagPressed(FGameplayTag InputTag);
 	void AbilityInputTagReleased(FGameplayTag InputTag);
-	void AbilityInputTagHeld(FGameplayTag InputTag);
+
+	/* Tank Ability Inputs */
+	UPROPERTY(EditDefaultsOnly, Category = "Tank Ability Inputs")
+	TObjectPtr<UTankAbilityInputConfig> TankAbilityInputs;
 
 	/* Movement */
 	void MoveTriggered(const FInputActionValue& InputActionValue);

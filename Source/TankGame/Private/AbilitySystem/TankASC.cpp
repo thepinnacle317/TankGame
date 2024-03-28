@@ -53,31 +53,6 @@ void UTankASC::AbilityInputTagPressed(const FGameplayTag& InputTag)
 	}
 }
 
-void UTankASC::AbilityInputTagHeld(const FGameplayTag& InputTag)
-{
-	if (!InputTag.IsValid()) return;
-	/* Check if we have an ability that can be activated that is paired to the Input Tag and
-	 * try to activate it if there is a matching Tag to the Input.
-	 */
-	for (FGameplayAbilitySpec& AbilitySpec : ActivatableAbilities.Items)
-	{
-		if (AbilitySpec.Ability && AbilitySpec.DynamicAbilityTags.HasTagExact(InputTag))
-		{
-			if (AbilitySpec.DynamicAbilityTags.IsValid())
-			{
-				Super::AbilitySpecInputPressed(AbilitySpec);
-
-				// Sets a bool if the input was pressed
-				// Check that there is not a current active ability for that input
-				if (!AbilitySpec.IsActive())
-				{
-					TryActivateAbility(AbilitySpec.Handle);
-				}
-			}
-		}
-	}
-}
-
 void UTankASC::AbilityInputTagReleased(const FGameplayTag& InputTag)
 {
 	if (!InputTag.IsValid()) return;
