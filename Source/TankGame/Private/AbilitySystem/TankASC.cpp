@@ -47,7 +47,6 @@ void UTankASC::AbilityInputTagPressed(const FGameplayTag& InputTag)
 			else
 			{
 				TryActivateAbility(AbilitySpec.Handle);
-				UE_LOG(LogTemp, Warning, TEXT("AbilitySpecInputPressed: %s"), *InputTag.ToString());
 			}
 		}
 	}
