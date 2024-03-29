@@ -103,7 +103,13 @@ void ATankController::Steering(const FInputActionValue& InputActionValue)
 }
 
 void ATankController::TurretLook(const FInputActionValue& InputActionValue)
-{	
+{
+	const FVector2d LookAxisVector = InputActionValue.Get<FVector2d>();
+	if (APawn* ControlledPawn = GetPawn<APawn>())
+	{
+		ControlledPawn->AddControllerPitchInput(LookAxisVector.Y);
+		ControlledPawn->AddControllerYawInput(LookAxisVector.X);
+	}
 }
 
 void ATankController::Brake(const FInputActionValue& InputActionValue)

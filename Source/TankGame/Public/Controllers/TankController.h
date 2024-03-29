@@ -73,6 +73,10 @@ private:
 	float ThrottleValue;
 	UPROPERTY(VisibleAnywhere)
 	float BrakeValue;
+	UPROPERTY(VisibleAnywhere)
+	FRotator TurretRotation;
+	UPROPERTY(VisibleAnywhere)
+	float BarrelInclination;
 
 	/* Ability System */
 	UTankASC* GetTankASC();

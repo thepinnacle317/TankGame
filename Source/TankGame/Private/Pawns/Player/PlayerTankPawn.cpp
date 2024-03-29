@@ -7,7 +7,6 @@
 #include "AbilitySystem/TankASC.h"
 #include "Camera/CameraComponent.h"
 #include "Components/SceneComponent.h"
-#include "Components/CapsuleComponent.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Game/TankPlayerState.h"
 #include "GameFramework/SpringArmComponent.h"

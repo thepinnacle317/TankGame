@@ -6,6 +6,11 @@
 #include "GameFramework/GameModeBase.h"
 #include "TankGameModeBase.generated.h"
 
+
+/* Forward Declarations */
+class UTankClasses;
+
+
 /**
  * 
  */
@@ -13,5 +18,8 @@ UCLASS()
 class TANKGAME_API ATankGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
-	
+public:
+
+	UPROPERTY(EditDefaultsOnly, Category = "Tank Class Data")
+	TObjectPtr<UTankClasses> TankClasses;
 };

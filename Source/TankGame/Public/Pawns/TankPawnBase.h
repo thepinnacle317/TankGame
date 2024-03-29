@@ -6,6 +6,7 @@
 #include "GameFramework/Pawn.h"
 #include "AbilitySystemInterface.h"
 #include "WheeledVehiclePawn.h"
+#include "Interfaces/TankInterface.h"
 #include "TankPawnBase.generated.h"
 
 
@@ -20,7 +21,7 @@ class UCapsuleComponent;
 class UChaosWheeledVehicleMovementComponent;
 
 UCLASS()
-class TANKGAME_API ATankPawnBase : public AWheeledVehiclePawn , public IAbilitySystemInterface
+class TANKGAME_API ATankPawnBase : public AWheeledVehiclePawn , public IAbilitySystemInterface, public ITankInterface
 {
 	GENERATED_BODY()
 

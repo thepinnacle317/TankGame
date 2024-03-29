@@ -37,6 +37,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess = "true"))
 	TObjectPtr<UCameraComponent> Camera;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	FRotator TankTurretRotation;
+
 private:
 	virtual void InitAbilityActorInfo() override;
 
