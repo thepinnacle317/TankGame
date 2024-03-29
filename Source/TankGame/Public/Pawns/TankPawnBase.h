@@ -10,7 +10,6 @@
 #include "TankPawnBase.generated.h"
 
 
-
 /* Forward Declarations */
 struct FInputActionValue;
 class UAbilitySystemComponent;
@@ -33,13 +32,13 @@ public:
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
 	UAttributeSet* GetAttributeSet() const { return AttributeSet; }
-
 	
 	TObjectPtr<UChaosWheeledVehicleMovementComponent> VehicleMovementComponent;
 
 	/* Death */
 	UFUNCTION(NetMulticast, Reliable)
 	virtual void MulticastTankDeath();
+	virtual void Die() override;
 
 protected:
 	virtual void BeginPlay() override;

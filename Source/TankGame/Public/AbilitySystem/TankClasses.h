@@ -47,7 +47,7 @@ class TANKGAME_API UTankClasses : public UDataAsset
 public:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Tank Class Info | Tank Class Map")
-	TMap<ETankClasses, FTankClassAbilityDetails> TankClassInformation;
+	TMap<TEnumAsByte<ETankClasses>, FTankClassAbilityDetails> TankClassInformation;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Tank Class Info | Common Abilities")
 	TArray<TSubclassOf<UGameplayAbility>> TankCommonAbilities;

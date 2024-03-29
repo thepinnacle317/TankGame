@@ -23,10 +23,14 @@ void ATankPawnBase::MulticastTankDeath_Implementation()
 	bDead = true;
 }
 
+void ATankPawnBase::Die()
+{
+	MulticastTankDeath();
+}
+
 void ATankPawnBase::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 void ATankPawnBase::ApplyEffectToSelf(TSubclassOf<UGameplayEffect> GameplayEffectClass, float Level) const
