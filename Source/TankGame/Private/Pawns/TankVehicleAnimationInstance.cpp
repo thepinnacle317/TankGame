@@ -13,3 +13,4 @@ void UTankVehicleAnimationInstance::NativeInitializeAnimation()
 		UE_LOG(LogTemp, Warning, TEXT("Tank Pawn Cast Failed in Native Initialization"));
 	}
 }
+

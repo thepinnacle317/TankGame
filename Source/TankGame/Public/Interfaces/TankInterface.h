@@ -7,6 +7,8 @@
 #include "TankInterface.generated.h"
 
 
+class ATankController;
+
 UINTERFACE(MinimalAPI, BlueprintType)
 class UTankInterface : public UInterface
 {
@@ -29,6 +31,9 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	AActor* GetAvatar();
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	ATankController* GetTankController();
 	
-	virtual void Die() = 0;
+	virtual void Death() = 0;
 };

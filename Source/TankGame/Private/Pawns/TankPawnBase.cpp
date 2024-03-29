@@ -23,7 +23,7 @@ void ATankPawnBase::MulticastTankDeath_Implementation()
 	bDead = true;
 }
 
-void ATankPawnBase::Die()
+void ATankPawnBase::Death()
 {
 	MulticastTankDeath();
 }
@@ -69,6 +69,11 @@ void ATankPawnBase::AddTankAbilities()
 	// Check if the server has authority since this will be a server call
 	if (!HasAuthority()) return;
 	TankASC->AddTankAbilities(TankStartupAbilities);
+}
+
+AActor* ATankPawnBase::GetAvatar_Implementation()
+{
+	return this;
 }
 
 void ATankPawnBase::Tick(float DeltaTime)

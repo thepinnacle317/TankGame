@@ -19,6 +19,7 @@ class UGameplayAbility;
 class UCapsuleComponent;
 class UChaosWheeledVehicleMovementComponent;
 
+
 UCLASS()
 class TANKGAME_API ATankPawnBase : public AWheeledVehiclePawn , public IAbilitySystemInterface, public ITankInterface
 {
@@ -27,18 +28,19 @@ class TANKGAME_API ATankPawnBase : public AWheeledVehiclePawn , public IAbilityS
 public:
 	ATankPawnBase();
 	virtual void Tick(float DeltaTime) override;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	FRotator TankTurretRotation;
 	
 	/* Ability System */
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
-
 	UAttributeSet* GetAttributeSet() const { return AttributeSet; }
-	
 	TObjectPtr<UChaosWheeledVehicleMovementComponent> VehicleMovementComponent;
 
 	/* Death */
 	UFUNCTION(NetMulticast, Reliable)
 	virtual void MulticastTankDeath();
-	virtual void Die() override;
+	virtual void Death() override;
 
 protected:
 	virtual void BeginPlay() override;
@@ -49,6 +51,8 @@ protected:
 	virtual void InitializeDefaultAttributes() const;
 	virtual void InitAbilityActorInfo();
 	void AddTankAbilities();
+	virtual AActor* GetAvatar_Implementation() override;
+	
 
 	UPROPERTY()
 	TObjectPtr<UAttributeSet> AttributeSet;

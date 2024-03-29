@@ -25,4 +25,5 @@ public:
 
 	UPROPERTY(BlueprintReadOnly, Category="Tank Properties")
     TObjectPtr<APlayerTankPawn> TankPawn;
+
 };
