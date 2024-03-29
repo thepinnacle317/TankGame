@@ -87,7 +87,7 @@ void ATankController::Throttle(const FInputActionValue& InputActionValue)
 	if (TankPawn)
 	{
 		TankPawn->VehicleMovementComponent->SetThrottleInput(ThrottleValue);
-		GEngine->AddOnScreenDebugMessage(3, 3.f, FColor::Orange, FString::Printf(TEXT("Throttle Value: %f"), ThrottleValue));
+		GEngine->AddOnScreenDebugMessage(2, 3.f, FColor::Orange, FString::Printf(TEXT("Throttle Value: %f"), ThrottleValue));
 	}
 }
 
@@ -97,6 +97,20 @@ void ATankController::Steering(const FInputActionValue& InputActionValue)
 
 	if (TankPawn)
 	{
+		if (bReversing)
+		{
+			SteeringValue *= -1;
+		}
+		
+		if (bReversing == false)
+		{
+			// Adds a small throttle input to help steer faster when turning in place.  Helps counteract the physics force
+			if (ThrottleValue < .2f && SteeringValue != 0.f)
+			{
+				TankPawn->VehicleMovementComponent->SetThrottleInput(.1f);
+			}
+		}
+		
 		TankPawn->VehicleMovementComponent->SetYawInput(SteeringValue);
 		GEngine->AddOnScreenDebugMessage(3, 3.f, FColor::Orange, FString::Printf(TEXT("Steering Value: %f"), SteeringValue));
 	}
@@ -116,10 +130,12 @@ void ATankController::Brake(const FInputActionValue& InputActionValue)
 {
 	BrakeValue = InputActionValue.Get<float>();
 
+	BrakeValue > 0.f ? bReversing = true : bReversing = false;
+
 	if (TankPawn)
 	{
 		TankPawn->VehicleMovementComponent->SetBrakeInput(BrakeValue);
-		GEngine->AddOnScreenDebugMessage(3, 3.f, FColor::Orange, FString::Printf(TEXT("Brake Value: %f"), BrakeValue));
+		GEngine->AddOnScreenDebugMessage(4, 3.f, FColor::Orange, FString::Printf(TEXT("Brake Value: %f"), BrakeValue));
 	}
 }
 
@@ -154,4 +170,5 @@ UTankASC* ATankController::GetTankASC()
 void ATankController::PlayerTick(float DeltaTime)
 {
 	Super::PlayerTick(DeltaTime);
+	GEngine->AddOnScreenDebugMessage(5, 3.f, FColor::Orange, FString::Printf(TEXT("Reversing?: %s"), bReversing ? TEXT("True") : TEXT("False")));
 }

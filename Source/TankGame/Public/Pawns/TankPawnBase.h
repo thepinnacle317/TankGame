@@ -63,6 +63,9 @@ protected:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Tank Properties|Gameplay Effects")
 	TSubclassOf<UGameplayEffect> DefaultTankAttributes;
 
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Tank Properties|Gameplay Effects")
+	TSubclassOf<UGameplayEffect> SecondaryTankAttributes;
+
 private:
 	UPROPERTY(EditAnywhere, Category="Tank Properties|Startup Abilities")
 	TArray<TSubclassOf<UGameplayAbility>> TankStartupAbilities;

@@ -60,7 +60,7 @@ void UTankAbilitySystemLibrary::GiveStartupAbilities(const UObject* WorldContext
 
 UTankClasses* UTankAbilitySystemLibrary::GetTankClassDetails(const UObject* WorldContextObject)
 {
-	ATankGameModeBase* TankGameMode = Cast<ATankGameModeBase>(UGameplayStatics::GetGameMode(WorldContextObject));
+	const ATankGameModeBase* TankGameMode = Cast<ATankGameModeBase>(UGameplayStatics::GetGameMode(WorldContextObject));
 	if (TankGameMode == nullptr) return nullptr;
 	return TankGameMode->TankClasses;
 }

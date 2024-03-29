@@ -56,6 +56,7 @@ void ATankPawnBase::ApplyEffectToSelf(TSubclassOf<UGameplayEffect> GameplayEffec
 void ATankPawnBase::InitializeDefaultAttributes() const
 {
 	ApplyEffectToSelf(DefaultTankAttributes, 1.f);
+	ApplyEffectToSelf(SecondaryTankAttributes, 1.f);
 }
 
 void ATankPawnBase::InitAbilityActorInfo()

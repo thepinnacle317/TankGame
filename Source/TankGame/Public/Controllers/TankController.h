@@ -30,6 +30,9 @@ public:
 	virtual void PlayerTick(float DeltaTime) override;
 	virtual void SetupInputComponent() override;
 
+	UPROPERTY(BlueprintReadOnly)
+	bool bReversing;
+
 protected:
 	virtual void BeginPlay() override;
 	virtual void OnPossess(APawn* InPawn) override;
@@ -66,7 +69,7 @@ private:
 	void Brake(const FInputActionValue& InputActionValue);
 	void StartBrake(const FInputActionValue& InputActionValue);
 	void StopBrake(const FInputActionValue& InputActionValue);
-
+	
 	UPROPERTY(VisibleAnywhere)
 	float SteeringValue;
 	UPROPERTY(VisibleAnywhere)
