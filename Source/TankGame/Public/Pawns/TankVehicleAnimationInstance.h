@@ -20,10 +20,4 @@ class TANKGAME_API UTankVehicleAnimationInstance : public UVehicleAnimationInsta
 {
 	GENERATED_BODY()
 
-public:
-	virtual void NativeInitializeAnimation() override;
-
-	UPROPERTY(BlueprintReadOnly, Category="Tank Properties")
-    TObjectPtr<APlayerTankPawn> TankPawn;
-
 };
