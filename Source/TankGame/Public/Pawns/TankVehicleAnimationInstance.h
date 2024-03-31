@@ -20,4 +20,12 @@ class TANKGAME_API UTankVehicleAnimationInstance : public UVehicleAnimationInsta
 {
 	GENERATED_BODY()
 
+public:
+	FVector2D MainGunVertRange;
+	FRotator TurretRotation;
+	float TurretRotationSpeed;
+	float MainGunSpeed;
+	float TurretYaw;
+	float GunPitch;
+
 };

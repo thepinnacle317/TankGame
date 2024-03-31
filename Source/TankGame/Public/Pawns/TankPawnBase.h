@@ -29,9 +29,6 @@ public:
 	ATankPawnBase();
 	virtual void Tick(float DeltaTime) override;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	FRotator TankTurretRotation;
-	
 	/* Ability System */
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	UAttributeSet* GetAttributeSet() const { return AttributeSet; }
@@ -41,6 +38,14 @@ public:
 	UFUNCTION(NetMulticast, Reliable)
 	virtual void MulticastTankDeath();
 	virtual void Death() override;
+
+	/* Tank Properties */
+	
+	/* Tank Lights */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float LightIntensity;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float EmissiveIntensity;
 
 protected:
 	virtual void BeginPlay() override;

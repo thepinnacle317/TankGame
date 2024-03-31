@@ -2,7 +2,6 @@
 
 
 #include "Pawns/Player/PlayerTankPawn.h"
-
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystem/TankASC.h"
 #include "Camera/CameraComponent.h"
@@ -67,4 +66,9 @@ void APlayerTankPawn::OnRep_PlayerState()
 void APlayerTankPawn::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
+}
+
+void APlayerTankPawn::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
 }

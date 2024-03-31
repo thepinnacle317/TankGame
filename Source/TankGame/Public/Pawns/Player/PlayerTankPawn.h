@@ -30,12 +30,22 @@ public:
 	virtual void PossessedBy(AController* NewController) override;
 	virtual void OnRep_PlayerState() override;
 	virtual void PostInitializeComponents() override;
+	virtual void Tick(float DeltaSeconds) override;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess = "true"))
 	TObjectPtr<USpringArmComponent> SpringArm;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess = "true"))
 	TObjectPtr<UCameraComponent> Camera;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	float TraceDistance = 80000.f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	FVector2D MainGunRange;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	FVector CameraTraceLocation;
 
 private:
 	virtual void InitAbilityActorInfo() override;
