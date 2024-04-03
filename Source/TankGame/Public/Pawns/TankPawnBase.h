@@ -33,6 +33,7 @@ public:
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	UAttributeSet* GetAttributeSet() const { return AttributeSet; }
 	TObjectPtr<UChaosWheeledVehicleMovementComponent> VehicleMovementComponent;
+	virtual FVector GetTankSocketLocation_Implementation(const FName Socket) override;
 
 	/* Death */
 	UFUNCTION(NetMulticast, Reliable)
@@ -40,6 +41,9 @@ public:
 	virtual void Death() override;
 
 	/* Tank Properties */
+
+	UPROPERTY(EditDefaultsOnly, Category = "Tank Properties")
+	FName MainGunSocket;
 	
 	/* Tank Lights */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

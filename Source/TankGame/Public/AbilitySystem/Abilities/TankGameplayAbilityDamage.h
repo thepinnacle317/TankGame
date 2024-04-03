@@ -31,12 +31,15 @@ public:
 	bool DrawDebug = false;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay Ability | Properties")
-	FName Socket;
+	FName MainGunSocket;
 
 	bool DidHit;
 
 	UPROPERTY(BlueprintReadOnly, Category = "Gameplay Ability | Properties")
 	FVector TraceHitLocation;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay Ability | Properties")
+	TObjectPtr<USoundBase> FiredSound;
 
 protected:
 

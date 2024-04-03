@@ -22,7 +22,7 @@ void UTankFireAbility::SpawnProjectile(const FVector& ProjectileTargetLocation)
 	if(!bIsServer) return;
 
 	// Get the socket location through the interface for the tank
-	const FVector SocketLocation = ITankInterface::Execute_GetTankSocket(GetAvatarActorFromActorInfo(), Socket);
+	const FVector SocketLocation = ITankInterface::Execute_GetTankSocketLocation(GetAvatarActorFromActorInfo(), MainGunSocket);
 	
 	// Get the rotation from the target location to the socket
 	FRotator Rotation = (ProjectileTargetLocation - SocketLocation).Rotation();

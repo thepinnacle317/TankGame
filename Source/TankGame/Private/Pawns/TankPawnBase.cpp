@@ -23,6 +23,11 @@ void ATankPawnBase::MulticastTankDeath_Implementation()
 	bDead = true;
 }
 
+FVector ATankPawnBase::GetTankSocketLocation_Implementation(const FName Socket)
+{
+	return GetMesh()->GetSocketLocation(Socket);
+}
+
 void ATankPawnBase::Death()
 {
 	MulticastTankDeath();

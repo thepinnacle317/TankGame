@@ -2,16 +2,15 @@
 
 
 #include "Actors/Projectiles/TankProjectile.h"
-
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
 #include "GameplayEffect.h"
-#include "NiagaraFunctionLibrary.h"
 #include "Components/AudioComponent.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Net/UnrealNetwork.h"
+#include "TankGame/TankGame.h"
 
 
 ATankProjectile::ATankProjectile()
@@ -21,8 +20,9 @@ ATankProjectile::ATankProjectile()
 
 	ProjectileSphere = CreateDefaultSubobject<USphereComponent>("Projectile Sphere");
 	SetRootComponent(ProjectileSphere);
+	
 	/* Collision Response */
-	//ProjectileSphere->SetCollisionObjectType(ECC_Projectile);
+	ProjectileSphere->SetCollisionObjectType(ECC_Projectile);
 	ProjectileSphere->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	ProjectileSphere->SetCollisionResponseToChannels(ECR_Ignore);
 	ProjectileSphere->SetCollisionResponseToChannel(ECC_WorldDynamic, ECR_Overlap);
@@ -33,9 +33,9 @@ ATankProjectile::ATankProjectile()
 	ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>("Projectile Movement Component");
 
 	// Default Projectile Properties *** TODO:in testing
-	ProjectileMovementComponent->InitialSpeed = 3550.f;
-	ProjectileMovementComponent->MaxSpeed = 5500.f;
-	ProjectileMovementComponent->ProjectileGravityScale = .35f;
+	ProjectileMovementComponent->InitialSpeed = 6500.f;
+	ProjectileMovementComponent->MaxSpeed = 10500.f;
+	ProjectileMovementComponent->ProjectileGravityScale = .5f;
 }
 
 void ATankProjectile::BeginPlay()
@@ -44,6 +44,10 @@ void ATankProjectile::BeginPlay()
 
 	// Set the projectiles lifespan
 	SetLifeSpan(LifeSpan);
+
+	ProjectileSphere->OnComponentBeginOverlap.AddDynamic(this, &ATankProjectile::OnSphereOverlap);
+
+	ProjectileSoundComponent = UGameplayStatics::SpawnSoundAttached(ProjectileSound, GetRootComponent());
 }
 
 void ATankProjectile::Destroyed()
@@ -53,7 +57,7 @@ void ATankProjectile::Destroyed()
 	if (!bDidHit && !HasAuthority())
 	{
 		UGameplayStatics::PlaySoundAtLocation(this, ImpactSound, GetActorLocation(), FRotator::ZeroRotator);
-		UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, ImpactEffect, GetActorLocation());
+		UGameplayStatics::SpawnEmitterAtLocation(this, ImpactEffect, GetActorLocation());
 		if (ProjectileSoundComponent)
 		{
 			ProjectileSoundComponent->Stop();
@@ -78,7 +82,7 @@ void ATankProjectile::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, 
 	if (!bDidHit)
 	{
 		UGameplayStatics::PlaySoundAtLocation(this, ImpactSound, GetActorLocation(), FRotator::ZeroRotator);
-		UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, ImpactEffect, GetActorLocation());
+		UGameplayStatics::SpawnEmitterAtLocation(this, ImpactEffect, GetActorLocation());
 	
 		if (ProjectileSoundComponent)
 		{

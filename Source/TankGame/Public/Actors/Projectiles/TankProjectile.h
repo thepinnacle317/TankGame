@@ -9,7 +9,6 @@
 
 
 /* Forward Declarations */
-class UNiagaraSystem;
 class USphereComponent;
 class UProjectileMovementComponent;
 
@@ -61,7 +60,7 @@ private:
 	TObjectPtr<UAudioComponent> ProjectileSoundComponent;
 
 	UPROPERTY(EditAnywhere, Category = "Projectile Properties | Effects")
-	TObjectPtr<UNiagaraSystem> ImpactEffect;
+	TObjectPtr<UParticleSystem> ImpactEffect;
 
 	bool bDidHit = false;
 
