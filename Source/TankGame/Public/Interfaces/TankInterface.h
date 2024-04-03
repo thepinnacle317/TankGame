@@ -34,6 +34,9 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	ATankController* GetTankController();
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	FVector GetTankSocket(const FName Socket);
 	
 	virtual void Death() = 0;
 };
