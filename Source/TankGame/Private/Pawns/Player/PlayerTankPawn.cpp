@@ -34,7 +34,7 @@ void APlayerTankPawn::InitAbilityActorInfo()
 	ATankPlayerState* TankPlayerState = GetPlayerState<ATankPlayerState>();
 	check(TankPlayerState);
 	TankPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(TankPlayerState, this);
-	Cast<UTankASC>(TankPlayerState->GetAbilitySystemComponent())->TankAbilityInfoSet();
+	Cast<UTankASC>(TankPlayerState->GetAbilitySystemComponent())->SetTankAbilityInfo();
 	AbilitySystemComponent = TankPlayerState->GetAbilitySystemComponent();
 	AttributeSet = TankPlayerState->GetAttributeSet();
 	

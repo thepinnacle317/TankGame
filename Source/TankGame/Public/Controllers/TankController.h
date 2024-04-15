@@ -78,8 +78,8 @@ private:
 	float BrakeValue;
 	UPROPERTY(VisibleAnywhere)
 	FRotator TurretRotation;
-	UPROPERTY(VisibleAnywhere)
-	float BarrelInclination;
+	//UPROPERTY(VisibleAnywhere)
+	//float BarrelInclination;
 
 	/* Ability System */
 	UTankASC* GetTankASC();

@@ -34,8 +34,11 @@ public:
 	UAttributeSet* GetAttributeSet() const { return AttributeSet; }
 	TObjectPtr<UChaosWheeledVehicleMovementComponent> VehicleMovementComponent;
 	virtual FVector GetTankSocketLocation_Implementation(const FName Socket) override;
+	
+	virtual AActor* GetAvatar_Implementation() override;
 
 	/* Death */
+	virtual bool IsDead_Implementation() override;
 	UFUNCTION(NetMulticast, Reliable)
 	virtual void MulticastTankDeath();
 	virtual void Death() override;
@@ -44,6 +47,12 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Tank Properties")
 	FName MainGunSocket;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Tank Properties")
+	FName MG1Socket;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Tank Properties")
+	FName MG2Socket;
 	
 	/* Tank Lights */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -59,9 +68,7 @@ protected:
 	void ApplyEffectToSelf(TSubclassOf<UGameplayEffect> GameplayEffectClass, float Level) const;
 	virtual void InitializeDefaultAttributes() const;
 	virtual void InitAbilityActorInfo();
-	void AddTankAbilities();
-	virtual AActor* GetAvatar_Implementation() override;
-	
+	void AddTankAbilities();	
 
 	UPROPERTY()
 	TObjectPtr<UAttributeSet> AttributeSet;

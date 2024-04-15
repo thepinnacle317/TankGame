@@ -28,6 +28,16 @@ FVector ATankPawnBase::GetTankSocketLocation_Implementation(const FName Socket)
 	return GetMesh()->GetSocketLocation(Socket);
 }
 
+AActor* ATankPawnBase::GetAvatar_Implementation()
+{
+	return this;
+}
+
+bool ATankPawnBase::IsDead_Implementation()
+{
+	return bDead;
+}
+
 void ATankPawnBase::Death()
 {
 	MulticastTankDeath();
@@ -75,11 +85,6 @@ void ATankPawnBase::AddTankAbilities()
 	// Check if the server has authority since this will be a server call
 	if (!HasAuthority()) return;
 	TankASC->AddTankAbilities(TankStartupAbilities);
-}
-
-AActor* ATankPawnBase::GetAvatar_Implementation()
-{
-	return this;
 }
 
 void ATankPawnBase::Tick(float DeltaTime)

@@ -8,7 +8,7 @@ UTankASC::UTankASC()
 {
 }
 
-void UTankASC::TankAbilityInfoSet()
+void UTankASC::SetTankAbilityInfo()
 {
 	OnGameplayEffectAppliedDelegateToSelf.AddUObject(this, &UTankASC::ClientEffectApplied);
 }
